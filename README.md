@@ -6,7 +6,7 @@ UT Austin Code Along: samtools and SAM/BAM format.
 
 If you are on Windows, install a -nix based virtual machine.
 
-To install samtools, execute the following lines in your Terminal application:
+Then, to install samtools, execute the following lines in your Terminal application:
 
 ```
 wget https://github.com/samtools/samtools/releases/download/1.14/samtools-1.14.tar.bz2
@@ -17,7 +17,7 @@ make
 sudo make install
 ```
 
-Test that samtools was installed:
+Test that samtools was installed, then create a sandbox (temporary directory):
 
 ```
 samtools -h
@@ -90,16 +90,19 @@ samtools fastq -n -1 $TEMPDIR/CBS_sim.R1.fq -2 $TEMPDIR/CBS_sim.R2.fq $TEMPDIR/C
 samtools sort -n examples/CBS_sim.bam > $TEMPDIR/CBS_sim_qname_sort.bam
 
 samtools fastq -n -1 $TEMPDIR/CBS_sim.R1.fq -2 $TEMPDIR/CBS_sim.R2.fq $TEMPDIR/CBS_sim_qname_sort.bam 
-
 ```
 
 If you work in Python or R, there are samtools APIs for those languages (pysam and Rsamtools).
 
-## Conclusions
+https://pysam.readthedocs.io/en/latest/
+
+https://bioconductor.org/packages/release/bioc/html/Rsamtools.html
+
+## Additional resources
 
 Read the samtools docs and the SAM format specification for more detailed information. The use of BAM files is encouraged to limit hard drive real estate.
 
-## End-to-end analysis workflows
+### End-to-end analysis workflows
 
 For RNA-seq analysis workflows, I recommend the following guides on R Bioconductor:
 
@@ -107,9 +110,14 @@ http://master.bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/i
 
 http://bioconductor.org/help/course-materials/2017/OSU/B3_RNASeq_Workflow.html
 
-## Background
+### High-throughput data analysis and statistics
 
 For a nice statistics refresher and more advanced data analysis techniques in R:
 
 http://genomicsclass.github.io/book/
+
+Zelig extends common statistical inference and modeling in R:
+
+http://docs.zeligproject.org/index.html
+
 
