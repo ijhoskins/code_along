@@ -96,16 +96,15 @@ samtools view -H $TEMPDIR/CBS_sim_coord_sort.bam
 It is often useful to sort the reads by query/read name. For example, this allows a developer to extract information from read pairs at the same time, making computation more efficient. Sorting by read name is also required for writing reads from SAM/BAM format to FASTQ:
 
 ```
-# This is invalid due to the coordinate-sorted BAM, and fails silently
-samtools fastq -n -1 $TEMPDIR/CBS_sim.R1.fq -2 $TEMPDIR/CBS_sim.R2.fq $TEMPDIR/CBS_sim_coord_sort.bam 
-
 # This is the proper way to write reads from BAM to FASTQ
 samtools sort -n examples/CBS_sim.bam > $TEMPDIR/CBS_sim_qname_sort.bam
 
 samtools fastq -n -1 $TEMPDIR/CBS_sim.R1.fq -2 $TEMPDIR/CBS_sim.R2.fq $TEMPDIR/CBS_sim_qname_sort.bam 
 ```
 
-If you work in Python or R, there are samtools APIs for those languages (pysam and Rsamtools).
+## Python and R interfaces to samtools
+
+If you would rather work strictly with Python or R packages, there are samtools APIs for each language (pysam and Rsamtools).
 
 https://pysam.readthedocs.io/en/latest/
 
@@ -113,7 +112,9 @@ https://bioconductor.org/packages/release/bioc/html/Rsamtools.html
 
 ## Additional resources
 
-Read the samtools docs and the SAM format specification for more detailed information. The use of BAM files is encouraged to limit hard drive real estate.
+Read the [samtools docs](http://samtools.sourceforge.net) and the [SAM format specification](https://samtools.github.io/hts-specs/SAMv1.pdf) for more detailed information.
+
+The use of BAM files is encouraged to limit the use of your file space. 
 
 ### End-to-end analysis workflows
 
