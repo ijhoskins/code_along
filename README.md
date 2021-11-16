@@ -20,7 +20,7 @@ sudo make install
 Test that samtools was installed, then create a sandbox (temporary directory):
 
 ```
-samtools -h
+samtools
 TEMPDIR = "/tmp"
 ```
 
@@ -54,19 +54,32 @@ samtools flags 83
 samtools flags 163
 ```
 
+Generate a quick summary of the reads in the file:
+
+```
+samtools flagstat examples/CBS_sim.bam
+```
+
+Generate a more detailed summary of the aligments:
+
+```
+samtools stats examples/CBS_sim.bam > $TEMPDIR/CBS_sim_stats.txt
+```
+
 Extract all R1 sequences:
+
 ```
 samtools flags READ1
-samtools view -f 64 CBS_sim.bam | cut -f 10
+samtools view -f 64 examples/CBS_sim.bam | cut -f 10
 ```
 
 Determine how the R1s aligned to the reference using the CIGAR field.
 
-The CIGAR field describes the position of insertions and deletions in the alignment. It also reports clipped segments, which are common in local alignment mode.
+The CIGAR field describes the position of insertions and deletions in the alignment. It also reports clipped segments, which are common in local alignment modes.
 
 ```
 samtools flags READ1
-samtools view -f 64 CBS_sim.bam | cut -f 6
+samtools view -f 64 examples/CBS_sim.bam | cut -f 6
 ```
 
 ## Visualizing alignments and writing reads from SAM/BAM format.
