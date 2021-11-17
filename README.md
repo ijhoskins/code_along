@@ -10,7 +10,7 @@ Then, to install samtools, execute the following lines in your Terminal applicat
 
 ```
 wget https://github.com/samtools/samtools/releases/download/1.14/samtools-1.14.tar.bz2
-tar -xvzf samtools-1.14.tar.bz2
+tar -xvf samtools-1.14.tar.bz2
 cd samtools-1.14/
 ./configure --without-curses --disable-bz2 --disable-lzma
 make
