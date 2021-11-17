@@ -75,7 +75,7 @@ samtools view -f 64 examples/CBS_sim.bam | cut -f 10
 
 Determine how the R1s aligned to the reference using the CIGAR field.
 
-The CIGAR field describes the position of insertions and deletions in the alignment. It also reports clipped segments, which are common in local alignment modes.
+The CIGAR field describes the position of insertions and deletions in the alignment. It also reports clipped segments, which can occur in local alignment mode.
 
 ```
 samtools flags READ1
@@ -84,22 +84,43 @@ samtools view -f 64 examples/CBS_sim.bam | cut -f 6
 
 ## Visualizing alignments and writing reads from SAM/BAM format.
 
-To visualize SAM/BAM alignments in genome browsers such as IGV, the alignments must be sorted by position and indexed:
+To visualize SAM/BAM alignments in genome browsers such as [IGV](https://software.broadinstitute.org/software/igv/), the alignments must be sorted by position and indexed:
 
 ```
 samtools sort examples/CBS_sim.bam > $TEMPDIR/CBS_sim_coord_sort.bam
 samtools index $TEMPDIR/CBS_sim_coord_sort.bam
-ls -l $TEMPDIR/CBS_sim_coord_sort.bam.bai
+ls -l $TEMPDIR/CBS_sim_coord_sort.bam*
 samtools view -H $TEMPDIR/CBS_sim_coord_sort.bam
 ```
 
-It is often useful to sort the reads by query/read name. For example, this allows a developer to extract information from read pairs at the same time, making computation more efficient. Sorting by read name is also required for writing reads from SAM/BAM format to FASTQ:
+It is often useful to sort the reads by query/read name. For example, this allows the user to conveniently extract information from read pairs simultaneously in custom analysis programs. Sorting by read name is also required for writing reads from BAM format to FASTQ:
 
 ```
 # This is the proper way to write reads from BAM to FASTQ
 samtools sort -n examples/CBS_sim.bam > $TEMPDIR/CBS_sim_qname_sort.bam
 
 samtools fastq -n -1 $TEMPDIR/CBS_sim.R1.fq -2 $TEMPDIR/CBS_sim.R2.fq $TEMPDIR/CBS_sim_qname_sort.bam 
+```
+
+## Advanced samtools
+
+Often samtools output can be combined with shell pipelines to quickly summarize data.
+
+One case is to count read names in a file. This is useful for determining if any reads have additional alignments (supplementary or secondary alignments) without the SAM flag.
+
+For example, SAM flags may turn invalid if alignments are filtered by the user and not subsequently aligned to re-generate the SAM flags. In this case, "orphan" reads (e.g. a read with an an unmapped mate that was filtered) must be handled by the user.
+
+```
+samtools view examples/CBS_sim.bam | cut -f 1 | sort | uniq -c | sort -k1nr | head
+```
+
+Alignment tags describe certain properties of alignments such as edit distance (number of edit operations between the read and the reference, i.e. mismatches and InDel stretches), and the position and identity of mismatches and InDels (CIGAR field and MD tag). This information is useful in variant calling applications.
+
+Say a developer wants to simulate variants in alignments and subsequently edits the reads by introducing mismatches or InDels. In this case, reads can written out to FASTQ and realigned to regenerate the NM and MD tags. Alternatively, samtools can be used to recalculate NM and MD alignment tags:
+
+```
+samtools calmd examples/CBS_sim.bam examples/CBS.fa > $TEMPDIR/CBS_sim_calmd.bam
+samtools view -H $TEMPDIR/CBS_sim_calmd.bam
 ```
 
 ## Python and R interfaces to samtools
