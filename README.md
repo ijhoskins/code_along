@@ -21,7 +21,7 @@ Test that samtools was installed, then create a sandbox (temporary directory):
 
 ```
 samtools
-TEMPDIR = "/tmp"
+TEMPDIR="/tmp"
 ```
 
 Clone the Code Along repository:
